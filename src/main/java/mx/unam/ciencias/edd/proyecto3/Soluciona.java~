@@ -1,0 +1,148 @@
+package mx.unam.ciencias.edd.proyecto3;
+import mx.unam.ciencias.edd.VerticeGrafica;
+import mx.unam.ciencias.edd.Grafica;
+import java.lang.NullPointerException;
+import mx.unam.ciencias.edd.Lista;
+import mx.unam.ciencias.edd.MeteSaca;
+import mx.unam.ciencias.edd.Cola;
+
+public class Soluciona{
+
+    private static Grafica<Casilla> roomGraph = new Grafica<>();
+    
+    private Soluciona() { }
+
+    private static Lista<Casilla> vecindad(int i, int j, Casilla[][] arr){
+	Lista<Casilla> vecinos = new Lista<>();
+	try{
+	    if (!arr[i][j].getNorte())
+		vecinos.agrega(arr[i - 1][j]);
+	}catch (ArrayIndexOutOfBoundsException ae){
+	    
+	}
+	try{
+	    if (!arr[i][j].getOeste())
+		vecinos.agrega(arr[i][j - 1]);
+	}catch (ArrayIndexOutOfBoundsException ae){
+	    
+	}
+	try{
+	    if (!arr[i][j].getSur())
+		vecinos.agrega(arr[i + 1][j]);
+	}catch (ArrayIndexOutOfBoundsException ae){
+	    
+	}
+	try{
+	    if (!arr[i][j].getEste())
+		vecinos.agrega(arr[i][j + 1]); 
+	}catch (ArrayIndexOutOfBoundsException ae){
+	   
+	}
+	return vecinos;
+    }
+
+    private static Grafica<Casilla> toGraph(Casilla[][] arr){
+	Grafica<Casilla> grafica = new Grafica<>();
+	for (int i = 0; i < arr.length; i++){
+	    for (int j = 0; j < arr[i].length; j++){
+	        if (!grafica.contiene(arr[i][j])) {
+		    grafica.agrega(arr[i][j]);
+		}
+		for (Casilla c : vecindad(i, j, arr)) {
+		    if (!grafica.contiene(c)) {
+			grafica.agrega(c);
+		    }
+		    if (!grafica.sonVecinos(arr[i][j], c)) {
+			grafica.conecta(arr[i][j], c);
+			grafica.setPeso(arr[i][j], c, 1 + (arr[i][j].getPuntaje() + c.getPuntaje()));
+		    }
+		}
+	    }
+	}
+	return grafica;
+    }
+     /**
+     * Verifica que exista un vecino segun la orientacion
+     * correspondiente.
+     */
+    private static boolean hayVecino(int i , int j, String orientacion, Casilla[][] arr){
+	switch (orientacion) {
+	case "NORTE":
+	    if ((i - 1) < arr.length)
+		return false;
+	    break;
+	case "OESTE":
+	    if ((j - 1) < arr[i].length)
+		return false;
+	    break;
+	case "ESTE":
+	    if ((j + 1) >= arr[i].length)
+		return false;
+	    break;
+	case "SUR":
+	    if ((i + 1) >= arr.length)
+		return false;
+	    break;
+	}
+	return true;
+    }
+
+      public static Lista<Casilla> solucion(Laberinto maze){
+	Casilla[][] arr = maze.get();
+	Lista<Casilla> lista = new Lista<>();
+	//Encuentra la entrada parte norte.
+	try {
+	    for (int j  = 0; j < arr[0].length; j++){
+		if (!arr[0][j].getNorte() && !hayVecino(0, j, "NORTE",arr)){
+		    arr[0][j].set_esEntrada(true);
+		    lista.agrega(arr[0][j]);
+		}
+	    }
+	}catch (NullPointerException ne) { }
+	//Encuentra la entrada parte oeste.
+	try{
+	    for (int i = 0; i < arr.length; i++){
+		if (!arr[i][0].getOeste() && !hayVecino(i, 0, "OESTE", arr)){
+		    arr[i][0].set_esEntrada(true);
+		    lista.agrega(arr[i][0]);
+		}
+	    }
+	}catch (NullPointerException ne) {}
+	//Encuentra la entrada parte sur.
+	try{
+	    for (int j = 0; j < arr[arr.length - 1].length; j++){
+		if (!arr[arr.length - 1][j].getSur() && !hayVecino(arr.length - 1, j, "SUR",arr)){
+		    arr[arr.length - 1][j].set_esEntrada(true);
+		    lista.agrega(arr[arr.length - 1][j]);
+		}
+	    }
+	}catch (NullPointerException ne) { }
+	//Encuentra la entrada parte este.
+	try{ 
+	for (int i = 0; i  < arr.length; i++){
+	    if (!arr[i][arr[i].length - 1].getEste() && !hayVecino(i, arr.length - 1, "ESTE",arr)){
+		arr[i][arr[i].length - 1].set_esEntrada(true);
+		lista.agrega(arr[i][arr[i].length - 1]);
+	    }
+	}
+	} catch (NullPointerException ne){ }
+	Casilla in = lista.getPrimero();
+	lista.eliminaPrimero();
+	Casilla out = lista.getPrimero();
+	lista.eliminaPrimero();
+	lista.esVacia();
+	Lista<VerticeGrafica<Casilla>> tray = toGraph(arr).trayectoriaMinima(in, out);
+	for (VerticeGrafica<Casilla> vC : tray){
+	    Casilla c = vC.get();
+	    for (int i = 0; i < arr.length; i++){
+		for (int j = 0; j < arr[i].length; j++){
+		    if (arr[i][j].equals(c)){
+		        lista.agrega(arr[i][j]);
+		    }
+			
+		}
+	    }
+	}
+	return lista;
+    }
+}

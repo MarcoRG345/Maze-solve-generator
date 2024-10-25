@@ -1,0 +1,18 @@
+package mx.unam.ciencias.edd.proyecto3;
+import mx.unam.ciencias.edd.Lista;
+
+public class Proyecto3{
+    
+    public static void main(String[] args){
+
+        if (args.length == 0){
+	    Casilla[][] matriz = Lectura.decodificar(Lectura.writeBytes());
+	    Laberinto maze = new Laberinto(matriz);
+	    System.out.println(maze.toString());
+	    GraficaLaberinto gLaberinto = new GraficaLaberinto(12, 12, maze);
+	    System.out.println(gLaberinto.toString());
+	}
+    }
+
+    
+}
