@@ -18,7 +18,4 @@ Run the program with the standard input (see the solution in a SVG format) and o
     "solution" the name of the solution file, the last one being whatever name you want, the ">" implies output redirection. `cat` is exclusive
    to Unix based system Linux/MacOS, if you are in windows can use `type` instead of `cat` command.
  * Standard Output: `java -jar target/proyecto3.jar -g -w X -h Y > file.mze`  where  X and Y are the width and height respectively.
-# Examples
- * Example from 10x10 maze solution<br>![](examples/10x10.svg)<br>
- * Example from 20x20 maze solution<br>![](examples/solution.svg)<br>
- * Example from 100x100 maze solution<br>![](examples/100x100.svg)<br> 
+
