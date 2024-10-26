@@ -24,7 +24,7 @@ public class Proyecto3{
 	    System.out.println("Uso->\nOutput: java -jar target/proyecto3.jar -g -w X -h Y\nInput: cat archivo.mze | java -jar target/proyecto3.jar");
 	}
 	
-        if (System.in != null && inputDataFound()){
+     if (System.in != null && inputDataFound()){
 	    Casilla[][] arr = Lectura.decodificar(Lectura.readBytes());
 	    Laberinto maze = new Laberinto(arr);
 	    int filas = maze.get().length;

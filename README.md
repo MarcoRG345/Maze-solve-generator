@@ -19,3 +19,6 @@ Run the program with the standard input (see the solution in a SVG format) and o
    to Unix based system Linux/MacOS, if you are in windows can use `type` instead of `cat` command.
  * Standard Output: `java -jar target/proyecto3.jar -g -w X -h Y > file.mze`  where  X and Y are the width and height respectively.
 # Examples
+ * Example from 10x10 maze solution<br>(examples/10x10.svg)<br>
+ * Example from 20x20 maze solution<br>(examples/solution.svg)<br>
+ * Example from 100x100 maze solution<br>(examples/100x100.svg)<br> 
